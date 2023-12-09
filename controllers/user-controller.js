@@ -72,4 +72,21 @@ const signup = async (req, res) => {
 
     res.status(responseCode).json(response);
   }
+
+  const isExistPhone = async (req, res) => {
+    const phoneNumber = req.body.phone;
+  
+    try {
+      const result = await pool.query('SELECT * FROM users WHERE phone = $1', [phoneNumber]);
+      if (result.rows.length > 0) {
+        res.json({ code: 200, isExist: true });
+      } else {
+        res.send({ code: 200, isExist: false });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ code: 400, message: "Couldn't understand request" });
+    }
+  };
+  
 };
